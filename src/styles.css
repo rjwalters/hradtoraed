@@ -798,6 +798,14 @@ textarea.source__input:focus-visible {
   font-weight: 600;
 }
 
+.demo__legend {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+  margin: -0.35rem 0 0.8rem;
+  max-width: 34rem;
+}
+
 .ladder {
   display: grid;
   gap: 0.3rem;

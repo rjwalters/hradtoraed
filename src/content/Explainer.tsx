@@ -48,6 +48,10 @@ function Ladder({
       <p className="demo__title">
         {word} · {total.toLocaleString()} legal rearrangements
       </p>
+      <p className="demo__legend">
+        Five of them, easiest first. The meter is our scramble score: how much we
+        predict each one slows you down.
+      </p>
       <div className="ladder">
         {rows.map((row) => (
           <div className="ladder__row" key={row.permutation}>
@@ -153,9 +157,15 @@ export function Explainer({ engine, settings }: ExplainerProps) {
       <Ladder word="important" engine={engine} settings={settings} />
 
       <p>
-        They are not equally readable, and the ordering above is our attempt to predict which
-        is which. Bars show our scramble score. Try the words in your own text: click any
-        rearranged word and the panel will show you what was measured.
+        Read down either list. If the bottom line costs you more than the top one, the score
+        is tracking something real. That order is a prediction, and you are the test of it.
+      </p>
+
+      <p>
+        You can check any word this way, not just these two. Click a rearranged word in the
+        text at the top of the page and a panel opens with the measurements behind its score:
+        how far each letter travelled, how many of the original letter pairs survived, and
+        whether the result happens to spell another English word.
       </p>
 
       <p>
