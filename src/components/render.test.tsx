@@ -112,6 +112,8 @@ describe('render', () => {
     }
     expect(html).toContain('Reshuffle')
     expect(html).toContain('the 3 you opened')
+    // One coherent phrase, not a dangling "15 were".
+    expect(html).toContain('too short')
   })
 
   it('renders the text picker on a sample and on custom text', () => {

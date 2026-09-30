@@ -141,7 +141,7 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  background: color-mix(in srgb, var(--paper) 97%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--rule);
   padding: 0.7rem 0;
@@ -307,7 +307,7 @@ input[type='range']:focus-visible {
  * the difficulty mid-sentence and watch the same line change.
  */
 .inset {
-  height: clamp(16rem, 52vh, 32rem);
+  height: clamp(11rem, 26vh, 18rem);
   overflow-y: auto;
   overscroll-behavior: contain;
   background: var(--paper-sunk);
@@ -963,6 +963,34 @@ textarea.source__input:focus-visible {
 
   .slider-row__label {
     display: none;
+  }
+
+  /* At 390px the tagline sat on one line and touched both edges. Smaller, so it
+     wraps inside the gutter instead. */
+  .tagline {
+    font-size: 0.95rem;
+    max-width: 22rem;
+  }
+
+  .wordmark {
+    font-size: clamp(1.9rem, 11vw, 2.6rem);
+  }
+}
+
+/*
+ * Below ~400px the five region labels no longer fit across the slider and
+ * "Diabolical" pushed the page into horizontal scroll. Tighten them rather than
+ * dropping any: the names are what give the slider its meaning.
+ */
+@media (max-width: 400px) {
+  .scale {
+    font-size: 0.56rem;
+    letter-spacing: 0.02em;
+    padding: 0;
+  }
+
+  .scale button {
+    padding: 0.1rem 0;
   }
 }
 

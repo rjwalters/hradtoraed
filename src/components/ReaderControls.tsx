@@ -66,13 +66,9 @@ export function ReaderControls({
         <span className="strip__spacer" />
 
         <span className="strip__stat">
-          <strong>{result.stats.words}</strong> words
-        </span>
-        <span className="strip__stat">
-          <strong>{result.stats.eligible}</strong> can be rearranged
-        </span>
-        <span className="strip__stat">
-          <strong>{result.stats.changed}</strong> were
+          <strong>{result.stats.words}</strong> words,{' '}
+          <strong>{result.stats.words - result.stats.eligible}</strong> of them too short
+          to rearrange at all
         </span>
       </div>
 
