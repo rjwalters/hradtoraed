@@ -114,6 +114,16 @@ reconciles it rather than dropping it. `workers_dev` stays on, which means
 `hradtoraed.personal-account-251.workers.dev` always serves the same build — use
 it to check something before it is what the domain serves.
 
+### The cache purge is not optional
+
+`scripts/deploy.sh` purges the zone cache after every deploy and then checks that
+the domain really serves the bundle that was just built. Skipping it produces a
+convincing failure: `wrangler deploy` reports success, workers.dev serves the new
+build, and `hradtoraed.com` keeps handing out the previous build's asset hashes,
+because `index.html` is cached at the zone edge and is the one file whose name
+never changes while its contents do. It looks exactly like a deploy that silently
+did not happen. The censusapi Worker has the same trap; see `~/.cloudflare/README.md`.
+
 ## Not in this version
 
 No accounts, no backend, no database, no crowdsourced experiments, no analytics, no
