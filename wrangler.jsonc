@@ -14,7 +14,6 @@
     { "pattern": "hradtoraed.com", "custom_domain": true }
   ],
 
-  // Kept on: hradtoraed.personal-account-251.workers.dev is the preview URL for
-  // checking a build before it is the thing the domain serves.
+  // Kept on: the *.workers.dev URL is the preview for checking a build.
   "workers_dev": true
 }

@@ -372,7 +372,17 @@ export function Explainer({ engine, settings }: ExplainerProps) {
         </p>
         <p>
           Everything on this page runs in your browser. Nothing you paste is uploaded, logged
-          or stored anywhere, and the URL never contains your text.
+          or stored anywhere, and the URL never contains your text. You do not have to take
+          that on faith —{' '}
+          <a
+            href="https://github.com/rjwalters/hradtoraed"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            the source is on GitHub
+          </a>
+          , including the scoring function, so you can check both the privacy claim and the
+          arithmetic behind every number on this page.
         </p>
       </div>
     </div>

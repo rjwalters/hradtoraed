@@ -30,7 +30,9 @@ export interface TransformSettings {
 }
 
 export const DEFAULT_SETTINGS: TransformSettings = {
-  difficulty: 35,
+  // Opens mid-slider, already scrambled. Landing on untouched text makes the
+  // page look like a plain article and hides what the site is for.
+  difficulty: 50,
   seed: 1,
   preset: 'balanced',
 }

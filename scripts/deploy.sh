@@ -9,21 +9,23 @@
 # keeps handing out the *previous* build's asset hashes until the edge copy
 # expires. It looks exactly like a deploy that did not happen.
 #
-# Same trap as the censusapi Worker, which is why that token carries Cache Purge
-# too. See ~/.cloudflare/README.md.
+# Any Worker served through a Cloudflare zone has this trap.
 #
-# Usage:
-#   set -a; . ~/.cloudflare/rjwalters/workers-hradtoraed.env; set +a
-#   npm run deploy
+# Needs, in the environment:
+#   CLOUDFLARE_API_TOKEN   Workers Scripts:Write, plus Cache Purge on the zone
+#   CLOUDFLARE_ZONE_ID     the zone to purge
+#   SITE_URL               optional, defaults to https://hradtoraed.com
 set -euo pipefail
 
-ZONE_ID=710ff3d1c005e5e9106fc687df29b18a
+SITE_URL="${SITE_URL:-https://hradtoraed.com}"
 
-if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
-  echo "CLOUDFLARE_API_TOKEN is not set." >&2
-  echo "  set -a; . ~/.cloudflare/rjwalters/workers-hradtoraed.env; set +a" >&2
-  exit 1
-fi
+for var in CLOUDFLARE_API_TOKEN CLOUDFLARE_ZONE_ID; do
+  if [[ -z "${!var:-}" ]]; then
+    echo "${var} is not set. Export it, or source whatever holds your" >&2
+    echo "deploy credentials, before running this." >&2
+    exit 1
+  fi
+done
 
 npx wrangler deploy
 
@@ -32,10 +34,10 @@ response=$(curl -sS -X POST \
   -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
   -H "Content-Type: application/json" \
   --data '{"purge_everything":true}' \
-  "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/purge_cache")
+  "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache")
 
 if ! printf '%s' "$response" | grep -q '"success":true'; then
-  echo "Cache purge FAILED. The deploy landed, but hradtoraed.com may serve the" >&2
+  echo "Cache purge FAILED. The deploy landed, but the site may serve the" >&2
   echo "previous build until the edge copy expires." >&2
   printf '%s\n' "$response" >&2
   exit 1
@@ -47,13 +49,13 @@ echo "Purged."
 # the purge did its job.
 local_js=""
 for f in dist/assets/*.js; do local_js="/assets/${f##*/}"; break; done
-live_js=$(curl -sS --max-time 20 https://hradtoraed.com/ \
+live_js=$(curl -sS --max-time 20 "${SITE_URL}/" \
   | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js' | head -1)
 
 if [[ "$local_js" == "$live_js" ]]; then
-  echo "Verified: hradtoraed.com is serving ${live_js}"
+  echo "Verified: ${SITE_URL} is serving ${live_js}"
 else
-  echo "WARNING: hradtoraed.com serves ${live_js:-<nothing>}, expected ${local_js}." >&2
+  echo "WARNING: ${SITE_URL} serves ${live_js:-<nothing>}, expected ${local_js}." >&2
   echo "Give the edge a moment and re-check before assuming the deploy worked." >&2
   exit 1
 fi

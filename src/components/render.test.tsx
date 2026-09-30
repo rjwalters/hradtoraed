@@ -17,10 +17,11 @@ import { ReaderControls } from './ReaderControls'
 import { TextPicker } from './TextPicker'
 import { Scrambled } from './Scrambled'
 import App from '../App'
+import { settingsFromSearch } from '../reading/urlSettings'
 import { Explainer } from '../content/Explainer'
 import { SAMPLES, DEFAULT_SAMPLE } from '../content/samples'
 import { PRESETS, type PresetName } from '../reading/difficulty'
-import { ScrambleEngine, type TransformSettings } from '../reading/transform'
+import { DEFAULT_SETTINGS, ScrambleEngine, type TransformSettings } from '../reading/transform'
 import { parseLexicon, buildNgramModel, type Resources } from '../reading/lexicon'
 
 const dataDir = join(__dirname, '..', '..', 'public', 'data')
@@ -231,6 +232,10 @@ describe('render', () => {
       expect(essay).toContain(url)
     }
 
+    // The repo link lives in the colophon, below the bibliography, next to the
+    // privacy claim it makes checkable.
+    expect(html).toContain('github.com/rjwalters/hradtoraed')
+
     // Every outbound link in the prose opens safely.
     const anchors = essay.match(/<a [^>]*href="https?:[^"]*"[^>]*>/g) ?? []
     expect(anchors.length).toBeGreaterThanOrEqual(4)
@@ -273,5 +278,39 @@ describe('render', () => {
 
     // The slider is above all of it, and carries no preset chips.
     expect(html.indexOf('type="range"')).toBeLessThan(inset)
+  })
+
+  /**
+   * A fresh visit used to resolve to difficulty 0 and show untouched text,
+   * because Number(null) is 0 and passed every range check, so the default was
+   * unreachable. The URL effect then wrote ?d=0 and made it stick.
+   */
+  it('falls back to the defaults when parameters are absent, not to zero', () => {
+    expect(settingsFromSearch('')).toEqual(DEFAULT_SETTINGS)
+    expect(settingsFromSearch('?')).toEqual(DEFAULT_SETTINGS)
+    expect(settingsFromSearch('?p=adversarial').difficulty).toBe(DEFAULT_SETTINGS.difficulty)
+    expect(settingsFromSearch('?d=').difficulty).toBe(DEFAULT_SETTINGS.difficulty)
+    expect(settingsFromSearch('?d=nonsense').difficulty).toBe(DEFAULT_SETTINGS.difficulty)
+
+    // The page should open already scrambled.
+    expect(DEFAULT_SETTINGS.difficulty).toBeGreaterThan(0)
+    expect(settingsFromSearch('').difficulty).toBeGreaterThan(0)
+  })
+
+  it('still honours parameters that are actually present', () => {
+    expect(settingsFromSearch('?d=0').difficulty).toBe(0)
+    expect(settingsFromSearch('?d=80').difficulty).toBe(80)
+    expect(settingsFromSearch('?d=101').difficulty).toBe(DEFAULT_SETTINGS.difficulty)
+    expect(settingsFromSearch('?d=-5').difficulty).toBe(DEFAULT_SETTINGS.difficulty)
+    expect(settingsFromSearch('?p=adversarial').preset).toBe('adversarial')
+    expect(settingsFromSearch('?p=bogus').preset).toBe(DEFAULT_SETTINGS.preset)
+    expect(settingsFromSearch('?s=7').seed).toBe(7)
+  })
+
+  it('opens with the text already scrambled', () => {
+    const html = renderToStaticMarkup(<App />)
+    // Words rendered as buttons are the ones that were rearranged.
+    expect(html).toContain('class="w"')
+    expect(html).not.toContain('Untouched. Move the slider.')
   })
 })

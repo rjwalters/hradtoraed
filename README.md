@@ -100,33 +100,39 @@ exactly the same text.
 
 ## Deploying
 
-Live at **https://hradtoraed.com**, served by the `hradtoraed` Worker (static
-assets only — no script, no bindings) on the personal Cloudflare account.
+Live at **https://hradtoraed.com**, served by a Cloudflare Worker that does
+nothing but hand out static assets — no script, no bindings, no backend.
 
 ```sh
-set -a; . ~/.cloudflare/rjwalters/workers-hradtoraed.env; set +a
+export CLOUDFLARE_API_TOKEN=...   # Workers Scripts:Write + Cache Purge on the zone
+export CLOUDFLARE_ZONE_ID=...
 npm run deploy
 ```
 
-That credential is dedicated to this project and scoped to Workers Scripts:Write
-on the account plus Workers Routes:Write and Zone:Read on `hradtoraed.com` alone.
-It is recorded in `2am/infra/cloudflare/token-manifest.yml` (id
-`7808e3eb388b58fd26fd0dc303faf789`) and synced by chezmoi.
-
-`wrangler.jsonc` declares the custom domain, so a deploy from a clean checkout
-reconciles it rather than dropping it. `workers_dev` stays on, which means
-`hradtoraed.personal-account-251.workers.dev` always serves the same build — use
-it to check something before it is what the domain serves.
+The token wants the narrowest scope that works: Workers Scripts:Write and
+Account Settings:Read on the account, and Workers Routes:Write, Zone:Read and
+Cache Purge on this one zone. `wrangler.jsonc` declares the custom domain, so a
+deploy from a clean checkout reconciles it rather than dropping it.
+`workers_dev` stays on, so the `*.workers.dev` URL always serves the same build.
 
 ### The cache purge is not optional
 
 `scripts/deploy.sh` purges the zone cache after every deploy and then checks that
-the domain really serves the bundle that was just built. Skipping it produces a
-convincing failure: `wrangler deploy` reports success, workers.dev serves the new
-build, and `hradtoraed.com` keeps handing out the previous build's asset hashes,
-because `index.html` is cached at the zone edge and is the one file whose name
-never changes while its contents do. It looks exactly like a deploy that silently
-did not happen. The censusapi Worker has the same trap; see `~/.cloudflare/README.md`.
+the site really serves the bundle that was just built. Skipping it produces a
+convincing failure: `wrangler deploy` reports success, the `workers.dev` URL
+serves the new build, and the custom domain keeps handing out the previous
+build's asset hashes, because `index.html` is cached at the zone edge and is the
+one file whose name never changes while its contents do. It looks exactly like a
+deploy that silently did not happen.
+
+## Licence
+
+The source is MIT — see [`LICENSE`](LICENSE).
+
+The word-frequency data is not. `scripts/en_50k.source.txt` and everything
+generated from it in `public/data/` derive from a CC BY-SA 4.0 list, so they
+carry those terms and their attribution. See
+[`public/data/LICENSE.txt`](public/data/LICENSE.txt).
 
 ## Not in this version
 

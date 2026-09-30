@@ -8,29 +8,13 @@ import { Scrambled } from './components/Scrambled'
 import { TextPicker } from './components/TextPicker'
 import { Explainer } from './content/Explainer'
 import { DEFAULT_SAMPLE, type Sample } from './content/samples'
-import { PRESETS, type PresetName } from './reading/difficulty'
 import { loadResources } from './reading/lexicon'
 import { DEFAULT_SETTINGS, ScrambleEngine, type TransformSettings } from './reading/transform'
+import { searchFromSettings, settingsFromSearch } from './reading/urlSettings'
 
-/**
- * Settings live in the URL so a particular reading can be linked. The text never
- * does: it stays in this tab, in memory, and nowhere else.
- */
 function settingsFromUrl(): TransformSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS
-  const params = new URLSearchParams(window.location.search)
-  const difficulty = Number(params.get('d'))
-  const seed = Number(params.get('s'))
-  const preset = params.get('p')
-  return {
-    difficulty:
-      Number.isFinite(difficulty) && difficulty >= 0 && difficulty <= 100
-        ? Math.round(difficulty)
-        : DEFAULT_SETTINGS.difficulty,
-    seed: Number.isFinite(seed) && seed > 0 ? Math.round(seed) : DEFAULT_SETTINGS.seed,
-    preset:
-      preset && preset in PRESETS ? (preset as PresetName) : DEFAULT_SETTINGS.preset,
-  }
+  return settingsFromSearch(window.location.search)
 }
 
 export default function App() {
@@ -67,11 +51,7 @@ export default function App() {
 
   // Keep the URL in step with the controls, without the text.
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('d', String(settings.difficulty))
-    if (settings.preset !== DEFAULT_SETTINGS.preset) params.set('p', settings.preset)
-    if (settings.seed !== DEFAULT_SETTINGS.seed) params.set('s', String(settings.seed))
-    window.history.replaceState(null, '', `?${params.toString()}`)
+    window.history.replaceState(null, '', searchFromSettings(settings))
   }, [settings])
 
   // Hold Alt/Option to peek at the originals.
