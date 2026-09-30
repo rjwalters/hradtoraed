@@ -47,15 +47,28 @@ echo "Purged."
 
 # Prove the domain actually serves what was just built, rather than trusting that
 # the purge did its job.
+#
+# With retries: a purge returns before it has propagated to every edge, so
+# checking immediately reports a stale bundle that is correct seconds later. A
+# check that cries wolf on every deploy is one people stop reading.
 local_js=""
 for f in dist/assets/*.js; do local_js="/assets/${f##*/}"; break; done
-live_js=$(curl -sS --max-time 20 "${SITE_URL}/" \
-  | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js' | head -1)
 
-if [[ "$local_js" == "$live_js" ]]; then
-  echo "Verified: ${SITE_URL} is serving ${live_js}"
-else
-  echo "WARNING: ${SITE_URL} serves ${live_js:-<nothing>}, expected ${local_js}." >&2
-  echo "Give the edge a moment and re-check before assuming the deploy worked." >&2
-  exit 1
-fi
+for attempt in 1 2 3 4 5; do
+  live_js=$(curl -sS --max-time 20 "${SITE_URL}/" \
+    | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js' | head -1 || true)
+
+  if [[ "$local_js" == "$live_js" ]]; then
+    echo "Verified: ${SITE_URL} is serving ${live_js}"
+    exit 0
+  fi
+
+  if (( attempt < 5 )); then
+    echo "  edge still on ${live_js:-<nothing>}, waiting (${attempt}/5)..."
+    sleep 4
+  fi
+done
+
+echo "FAILED: ${SITE_URL} serves ${live_js:-<nothing>}, expected ${local_js}." >&2
+echo "The deploy landed but the edge is still serving an older build." >&2
+exit 1
