@@ -13,6 +13,18 @@ import { Scrambled } from '../components/Scrambled'
  * does. Where a claim comes from a study it names the study.
  */
 
+const BY_ID = new Map(REFERENCES.map((r) => [r.id, r]))
+
+function Cite({ id, children }: { id: string; children: React.ReactNode }) {
+  const ref = BY_ID.get(id)
+  if (!ref) return <>{children}</>
+  return (
+    <a href={ref.url} target="_blank" rel="noreferrer noopener" title={`${ref.title} — ${ref.venue}`}>
+      {children}
+    </a>
+  )
+}
+
 interface ExplainerProps {
   engine: ScrambleEngine
   settings: TransformSettings
@@ -99,16 +111,19 @@ export function Explainer({ engine, settings }: ExplainerProps) {
 
       <p>
         The internet version of this claim arrived in 2003 as a paragraph about a study at
-        Cambridge University. There was no such study. Matt Davis, at the MRC Cognition and
-        Brain Sciences Unit in Cambridge, traced the underlying demonstration to Graham
-        Rawlinson's 1976 PhD thesis at Nottingham and wrote the definitive correction, which
-        is still the best page on the subject.
+        Cambridge University. There was no such study.{' '}
+        <Cite id="davis">Matt Davis</Cite>, at the MRC Cognition and Brain Sciences Unit in
+        Cambridge, traced the underlying demonstration to{' '}
+        <Cite id="rawlinson">Graham Rawlinson's 1976 PhD thesis</Cite> at Nottingham and wrote
+        the definitive correction, which is still the best page on the subject.
       </p>
 
       <p>
         The meme's stronger claim — that letter order simply does not matter — is false.
-        When Rayner, White, Johnson and Liversedge (2006) recorded eye movements instead of
-        asking people whether they could cope, jumbled text was read reliably more slowly.
+        When{' '}
+        <Cite id="rayner2006">Rayner, White, Johnson and Liversedge (2006)</Cite> recorded eye
+        movements instead of asking people whether they could cope, jumbled text was read
+        reliably more slowly.
         You can read it. You are also paying for it.
       </p>
 
@@ -124,7 +139,7 @@ export function Explainer({ engine, settings }: ExplainerProps) {
       <p>
         The evidence for softness is strong. Show someone <em>jugde</em> too quickly to
         consciously register, and it primes <em>COURT</em> almost as well as the word{' '}
-        <em>judge</em> does (Perea &amp; Lupker, 2003). It still works when the swapped
+        <em>judge</em> does (<Cite id="perea2003">Perea &amp; Lupker, 2003</Cite>). It still works when the swapped
         letters are not next to each other: <em>caniso</em> reaches <em>CASINO</em> (Perea
         &amp; Lupker, 2004).
       </p>
@@ -198,7 +213,15 @@ export function Explainer({ engine, settings }: ExplainerProps) {
       </div>
 
       <p>
-        These are called transposed-letter neighbours, and they cost something real. Acha and
+        These are called{' '}
+        <a
+          href="https://en.wikipedia.org/wiki/Transposed_letter_effect"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          transposed-letter neighbours
+        </a>
+        , and they cost something real. Acha and
         Perea (2008) found that a word with a higher-frequency transposed-letter neighbour is
         read more slowly in ordinary sentences; Pagán, Paterson, Blythe and Liversedge (2016)
         replicated it in eye movements. Johnson, Staub and Fleri (2012) showed the cost lives

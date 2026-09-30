@@ -216,6 +216,30 @@ describe('render', () => {
     expect(html).toContain('Keep clam and carry on')
   })
 
+  it('links out from the prose, not only from the bibliography', () => {
+    const html = renderToStaticMarkup(<Explainer engine={engine} settings={settings()} />)
+    const essay = html.slice(0, html.indexOf('class="refs"'))
+
+    // Inline citations resolve to the bibliography entry's own URL, so the two
+    // can never disagree about where a source lives.
+    for (const url of [
+      'mrc-cbu.cam.ac.uk/people/matt.davis/cmabrigde/',
+      'Cmabrigde/rawlinson.html',
+      'doi.org/10.1111/j.1467-9280.2006.01684.x',
+      'en.wikipedia.org/wiki/Transposed_letter_effect',
+    ]) {
+      expect(essay).toContain(url)
+    }
+
+    // Every outbound link in the prose opens safely.
+    const anchors = essay.match(/<a [^>]*href="https?:[^"]*"[^>]*>/g) ?? []
+    expect(anchors.length).toBeGreaterThanOrEqual(4)
+    for (const a of anchors) {
+      expect(a).toContain('target="_blank"')
+      expect(a).toMatch(/rel="[^"]*noreferrer/)
+    }
+  })
+
   it('scrambles a heading but keeps the original available', () => {
     const html = renderToStaticMarkup(
       <Scrambled text="Not all scrambles are equal" engine={engine} settings={settings({ difficulty: 90 })} />,

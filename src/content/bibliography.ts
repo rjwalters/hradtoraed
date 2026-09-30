@@ -33,6 +33,16 @@ export const REFERENCES: Reference[] = [
       'The definitive response to the meme. Traces it to Graham Rawlinson’s 1976 Nottingham PhD thesis, and lists the properties that make the famous paragraph unusually easy: short and function words left untouched, adjacent rather than distant transpositions, no rearrangement that creates a different word, and jumbles that preserve how the word sounds. Those observations are the origin of several of our features.',
   },
   {
+    id: 'rawlinson',
+    authors: 'Rawlinson, G.',
+    year: '1976',
+    title: 'The significance of letter position in word recognition (summary)',
+    venue: 'PhD thesis, University of Nottingham. Summary hosted by the MRC Cognition and Brain Sciences Unit',
+    url: 'https://www.mrc-cbu.cam.ac.uk/people/matt.davis/Cmabrigde/rawlinson.html',
+    relevance:
+      'The actual origin of the demonstration the meme stole, twenty-seven years before it started circulating. Rawlinson\u2019s own summary, written for Davis\u2019s page, including what he was testing and against which theories of word recognition.',
+  },
+  {
     id: 'rayner2006',
     authors: 'Rayner, K., White, S. J., Johnson, R. L., & Liversedge, S. P.',
     year: '2006',
