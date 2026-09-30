@@ -1,0 +1,20 @@
+{
+  "name": "hradtoraed",
+  "compatibility_date": "2026-09-30",
+
+  // Static-only: no Worker script, Cloudflare just serves ./dist.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+
+  // The live site. Declared here rather than left as dashboard-only state, so
+  // config matches reality and a deploy from a clean checkout cannot drop it.
+  "routes": [
+    { "pattern": "hradtoraed.com", "custom_domain": true }
+  ],
+
+  // Kept on: hradtoraed.personal-account-251.workers.dev is the preview URL for
+  // checking a build before it is the thing the domain serves.
+  "workers_dev": true
+}

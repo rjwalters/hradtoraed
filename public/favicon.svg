@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Two letters that have swapped places: the mark obeys the site's own rule. -->
+  <rect width="64" height="64" rx="13" fill="#1c1a17"/>
+  <g fill="#fbf9f5" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="600">
+    <text x="13" y="34" text-anchor="middle">r</text>
+    <text x="40" y="52" text-anchor="middle">a</text>
+  </g>
+  <path d="M22 40 L34 28" stroke="#e0a077" stroke-width="3" stroke-linecap="round"/>
+</svg>
