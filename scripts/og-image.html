@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  The social card, rendered to public/og.png by scripts/make-og.mjs.
+
+  Built as a page rather than drawn as an SVG so it uses the same typefaces and
+  the same colour tokens as the site itself, and so the joke in the card is made
+  by the same rule the site enforces: every word below keeps its first letter,
+  its last letter and its exact internal letters.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      :root {
+        --paper: #14161a;
+        --paper-sunk: #1b1e23;
+        --ink: #e8e4dd;
+        --ink-soft: #a9a39a;
+        --ink-faint: #746d64;
+        --rule: #2a2e35;
+        --accent: #e0a077;
+        --serif: ui-serif, Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+        --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 72px;
+        overflow: hidden;
+      }
+
+      .domain {
+        font-family: var(--mono);
+        font-size: 17px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 26px;
+      }
+
+      h1 {
+        font-family: var(--serif);
+        font-size: 108px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+
+      .tagline {
+        font-family: var(--serif);
+        font-size: 31px;
+        color: var(--ink-soft);
+        margin-top: 24px;
+      }
+
+      /* One word, three of its legal rearrangements, easy to hard. The whole
+         thesis in a single line: same letters, very different reading. */
+      .ladder {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin-top: 52px;
+        padding-top: 34px;
+        border-top: 1px solid var(--rule);
+        font-family: var(--serif);
+        font-size: 33px;
+      }
+
+      .ladder .step { color: var(--ink); }
+      .ladder .arrow { color: var(--ink-faint); font-size: 25px; }
+      .ladder .hard { color: var(--accent); }
+
+      .caption {
+        font-family: var(--sans);
+        font-size: 16px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-top: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="domain">hradtoraed.com</div>
+    <h1>Hrad to Raed</h1>
+    <p class="tagline">How hrad can we mkae txet bofere you can't raed it?</p>
+
+    <div class="ladder">
+      <span class="step">practical</span>
+      <span class="arrow">→</span>
+      <span class="step">parctical</span>
+      <span class="arrow">→</span>
+      <span class="step hard">pcciaartl</span>
+    </div>
+    <div class="caption">same letters · same ends · very different reading</div>
+  </body>
+</html>

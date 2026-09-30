@@ -125,6 +125,13 @@ build's asset hashes, because `index.html` is cached at the zone edge and is the
 one file whose name never changes while its contents do. It looks exactly like a
 deploy that silently did not happen.
 
+### The social card
+
+`public/og.png` is rendered from `scripts/og-image.html` by `npm run og`, so the
+card uses the site's own typefaces and colour tokens rather than a separate
+drawing that drifts. It is committed, not built: the build should not need a
+browser for an asset that changes about never.
+
 ## Licence
 
 The source is MIT — see [`LICENSE`](LICENSE).
