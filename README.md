@@ -64,7 +64,11 @@ npm run build
 ### Regenerating the data files
 
 `public/data/` is generated from a word frequency list checked in at
-`scripts/en_50k.source.txt` (hermitdave/FrequencyWords, OpenSubtitles 2018, MIT).
+`scripts/en_50k.source.txt` — hermitdave/FrequencyWords, OpenSubtitles 2018 via
+OPUS. That repository is MIT for its code and **CC BY-SA 4.0 for the word lists**,
+so `scripts/en_50k.source.txt` and everything generated from it in `public/data/`
+are CC BY-SA 4.0 derivatives and are shared on those terms. See
+`public/data/LICENSE.txt`. The rest of this repository is MIT.
 
 ```sh
 npm run build:data

@@ -178,13 +178,13 @@ export const DATA_SOURCES = [
   {
     label: 'Word frequencies',
     detail:
-      'hermitdave/FrequencyWords, English OpenSubtitles 2018 list, MIT licensed. Trimmed to 41,601 words and converted to the Zipf scale. A subtitle corpus skews conversational, so rare and technical words are simply absent rather than rated rare.',
+      'hermitdave/FrequencyWords, English OpenSubtitles 2018 list. That repository is MIT for its code and CC BY-SA 4.0 for the lists themselves, so our trimmed 41,601-word Zipf version is shared under CC BY-SA 4.0 too. Built from the OpenSubtitles 2018 corpus via OPUS. A subtitle corpus skews conversational, so rare and technical words are simply absent rather than rated rare.',
     url: 'https://github.com/hermitdave/FrequencyWords',
   },
   {
     label: 'Letter sequence statistics',
     detail:
-      'Derived from the same word list, weighted by word frequency, in scripts/build-lexicon.mjs. No external model.',
+      'Derived from the same word list, weighted by word frequency, in scripts/build-lexicon.mjs. No external model. Being a derivative of the list, it carries the same CC BY-SA 4.0 terms.',
     url: 'https://github.com/hermitdave/FrequencyWords',
   },
 ]

@@ -4,7 +4,10 @@
  *   public/data/lexicon.txt    words with Zipf frequency, for lexical-interference detection
  *   public/data/ngrams.json    frequency-weighted English letter bigram/trigram log probabilities
  *
- * Source: hermitdave/FrequencyWords, OpenSubtitles 2018 English (en_50k), MIT licensed.
+ * Source: hermitdave/FrequencyWords, OpenSubtitles 2018 English (en_50k).
+ * That repository is MIT for its code and CC BY-SA 4.0 for the word lists, so the
+ * files this script writes are derivatives of CC BY-SA 4.0 content and carry the
+ * same terms. See public/data/LICENSE.txt.
  * Kept at scripts/en_50k.source.txt so this build is reproducible offline.
  *
  * Frequencies are reported on the Zipf scale (van Heuven, Mandera, Keuleers &
